@@ -26,7 +26,10 @@ export default async function handler(req) {
 
     if (isBinary) {
       const buffer = await response.arrayBuffer();
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      const bytes = new Uint8Array(buffer);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const base64 = btoa(binary);
       return new Response(
         JSON.stringify({ ok: response.ok, status: response.status, base64, contentType }),
         {
